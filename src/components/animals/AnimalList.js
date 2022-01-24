@@ -22,7 +22,12 @@ export const AnimalListComponent = (props) => {
     let { toggleDialog, modalIsOpen } = useModal("#dialog--animal")
 
     const syncAnimals = () => {
-        AnimalRepository.getAll().then(data => petAnimals(data))
+        AnimalRepository.getAll().then(data => {
+            if (!getCurrentUser().employee) {
+                data = data.filter(animalObj => animalObj.animalOwners.find(animalOwner => animalOwner.userId === getCurrentUser().id))
+            }
+            petAnimals(data)
+        })
     }
 
     useEffect(() => {
