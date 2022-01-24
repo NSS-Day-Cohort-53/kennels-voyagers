@@ -16,6 +16,7 @@ export default (props) => {
     const [employeeId, setEmployeeId] = useState(0)
     const [locations, setLocations] = useState([]);
     const [locationId, setLocationId] = useState(0);
+    const [employeeLocations, setEmployeeLocations] = useState([])
     const [saveEnabled, setEnabled] = useState(false)
     const history = useHistory();
     const { getCurrentUser } = useSimpleAuth()
@@ -23,21 +24,24 @@ export default (props) => {
     const constructNewAnimal = evt => {
         evt.preventDefault()
         const eId = parseInt(employeeId)
+        const locId = parseInt(locationId);
 
         if (eId === 0) {
             window.alert("Please select a caretaker")
+        } else if(locId === 0) {
+            window.alert("Please select a location")
         } else {
             const emp = employees.find(e => e.id === eId)
             const animal = {
                 name: animalName,
                 breed: breed,
-                employeeId: eId,
                 locationId: parseInt(locationId)
             }
 
             AnimalRepository.addAnimal(animal)
                 .then(animalObj => {
                     AnimalOwnerRepository.assignOwner(animalObj.id, getCurrentUser().id)
+                    
                 })
                 .then(() => setEnabled(true))
                 .then(() => history.push("/animals"))
@@ -54,6 +58,14 @@ export default (props) => {
                 })
         },
         []
+    )
+
+    useEffect(
+        () => {
+            LocationRepository.getEmployeeLocationsbyLocation(locationId)
+                            .then(data => setEmployeeLocations(data))
+        },
+        [locationId]
     )
 
     return (
@@ -109,11 +121,12 @@ export default (props) => {
                     onChange={e => setEmployeeId(e.target.value)}
                 >
                     <option value="">Select an employee</option>
-                    {employees.map(e => (
-                        <option key={e.id} id={e.id} value={e.id}>
+                    {employeeLocations.map(empLoc => {
+                        const e = empLoc.user;
+                        return <option key={e.id} id={e.id} value={e.id}>
                             {e.name}
                         </option>
-                    ))}
+                    })}
                 </select>
             </div>
             <button type="submit"
