@@ -2,7 +2,9 @@ import React, { useState, useContext, useEffect } from "react"
 import "./AnimalForm.css"
 import AnimalRepository from "../../repositories/AnimalRepository";
 import EmployeeRepository from "../../repositories/EmployeeRepository";
+import AnimalOwnerRepository from "../../repositories/AnimalOwnerRepository";
 import { useHistory } from "react-router-dom";
+import useSimpleAuth from "../../hooks/ui/useSimpleAuth";
 
 
 export default (props) => {
@@ -13,6 +15,7 @@ export default (props) => {
     const [employeeId, setEmployeeId] = useState(0)
     const [saveEnabled, setEnabled] = useState(false)
     const history = useHistory();
+    const { getCurrentUser } = useSimpleAuth()
 
     const constructNewAnimal = evt => {
         evt.preventDefault()
@@ -30,6 +33,9 @@ export default (props) => {
             }
 
             AnimalRepository.addAnimal(animal)
+                .then(animalObj => {
+                    AnimalOwnerRepository.assignOwner(animalObj.id, getCurrentUser().id)
+                })
                 .then(() => setEnabled(true))
                 .then(() => history.push("/animals"))
         }
