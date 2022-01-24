@@ -3,6 +3,7 @@ import "./AnimalForm.css"
 import AnimalRepository from "../../repositories/AnimalRepository";
 import EmployeeRepository from "../../repositories/EmployeeRepository";
 import AnimalOwnerRepository from "../../repositories/AnimalOwnerRepository";
+import AnimalCaretakerRepository from "../../repositories/AnimalCaretakerRepository";
 import LocationRepository from "../../repositories/LocationRepository";
 import { useHistory } from "react-router-dom";
 import useSimpleAuth from "../../hooks/ui/useSimpleAuth";
@@ -41,7 +42,7 @@ export default (props) => {
             AnimalRepository.addAnimal(animal)
                 .then(animalObj => {
                     AnimalOwnerRepository.assignOwner(animalObj.id, getCurrentUser().id)
-                    
+                    AnimalCaretakerRepository.assignCaretaker(animalObj.id, eId)
                 })
                 .then(() => setEnabled(true))
                 .then(() => history.push("/animals"))
