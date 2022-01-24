@@ -1,6 +1,8 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useEffect } from "react"
 import "./AnimalForm.css"
 import AnimalRepository from "../../repositories/AnimalRepository";
+import EmployeeRepository from "../../repositories/EmployeeRepository";
+import { useHistory } from "react-router-dom";
 
 
 export default (props) => {
@@ -10,6 +12,7 @@ export default (props) => {
     const [employees, setEmployees] = useState([])
     const [employeeId, setEmployeeId] = useState(0)
     const [saveEnabled, setEnabled] = useState(false)
+    const history = useHistory();
 
     const constructNewAnimal = evt => {
         evt.preventDefault()
@@ -28,9 +31,17 @@ export default (props) => {
 
             AnimalRepository.addAnimal(animal)
                 .then(() => setEnabled(true))
-                .then(() => props.history.push("/animals"))
+                .then(() => history.push("/animals"))
         }
     }
+    
+    useEffect(
+        () => {
+            EmployeeRepository.getAll()
+                .then(data => setEmployees(data))
+        },
+        []
+    )
 
     return (
         <form className="animalForm">
