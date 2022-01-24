@@ -31,8 +31,8 @@ export const AnimalListComponent = (props) => {
     }
 
     useEffect(() => {
-        OwnerRepository.getAllCustomers().then(updateOwners)
-        AnimalOwnerRepository.getAll().then(setAnimalOwners)
+        OwnerRepository.getAllCustomers().then(data => updateOwners(data))
+        AnimalOwnerRepository.getAll().then(data => setAnimalOwners(data))
         syncAnimals()
     }, [])
 
