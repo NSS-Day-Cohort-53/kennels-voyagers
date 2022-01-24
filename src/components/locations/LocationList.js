@@ -9,7 +9,9 @@ export const LocationList = () => {
 
     useEffect(() => {
         LocationRepository.getAll()
-    }, [])
+        .then(data => updateLocations(data));
+    }, []
+    )
 
     return (
         <div className="locations">
