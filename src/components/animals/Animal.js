@@ -108,7 +108,7 @@ export const Animal = ({ animal, syncAnimals,
                             </span>
 
                             {
-                                myOwners.length <= 6
+                                isEmployee && myOwners.length <= 6
                                     ? 
                                     <>
                                         <select defaultValue=""
