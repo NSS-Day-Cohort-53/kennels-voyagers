@@ -59,8 +59,10 @@ export const Animal = ({ animal, syncAnimals,
     }, [myOwners])
 
     const addOwner = (event) => {
-        AnimalOwnerRepository.assignOwner(currentAnimal.id,selectedOwnerId)
-            .then( () => syncAnimals())
+        if (selectedOwnerId > 0 ) {
+            AnimalOwnerRepository.assignOwner(currentAnimal.id,selectedOwnerId)
+                .then( () => syncAnimals())
+        }
     }
 
     return (
