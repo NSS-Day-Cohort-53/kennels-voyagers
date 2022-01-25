@@ -157,17 +157,19 @@ export const Animal = ({ animal, syncAnimals,
 
                         {
                             isEmployee
-                                ? 
-                                <>
-                                    <button className="btn btn-warning mt-3 form-control small" onClick={() => addTreatment(currentAnimal)}>Add Treatment</button>
-                                    <button className="btn btn-warning mt-3 form-control small" onClick={() =>
-                                        AnimalOwnerRepository
-                                            .removeOwnersAndCaretakers(currentAnimal.id)
-                                            .then(() => {}) // Remove animal
-                                            .then(() => {}) // Get all animals
+                                ?
+                            <>
+                                <button className="btn btn-warning mt-3 form-control small" onClick={() => addTreatment(currentAnimal)}>Add Treatment</button>
+                                 <button className="btn btn-warning mt-3 form-control small" onClick={() =>
+                                    AnimalOwnerRepository
+                                        .removeOwnersAndCaretakers(currentAnimal.id)
+                                        .then(() => {AnimalRepository.delete(currentAnimal.id)}) // Remove animal
+                                        .then(() => {AnimalRepository.getAll()}) // Get all animals
+                                        .then(()=> {syncAnimals()})
                                     }>Discharge</button>
-                                </>
-                                    : ""
+                                    </>
+                                : ""
+                               
                                
                         }
 
