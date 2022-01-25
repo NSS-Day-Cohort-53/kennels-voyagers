@@ -108,7 +108,7 @@ export const Animal = ({ animal, syncAnimals,
                             </span>
 
                             {
-                                myOwners.length < 6
+                                myOwners.length <= 6
                                     ? 
                                     <>
                                         <select defaultValue=""
@@ -116,7 +116,7 @@ export const Animal = ({ animal, syncAnimals,
                                             className="form-control small"
                                             onChange={(event) => {setSelectedOwnerId(parseInt(event.target.value))}} >
                                             <option value="0">
-                                                Select {myOwners.length === 1 ? "another" : "an"} owner
+                                                Select {myOwners.length >= 1 ? "another" : "an"} owner
                                             </option>
                                             {
                                                 
