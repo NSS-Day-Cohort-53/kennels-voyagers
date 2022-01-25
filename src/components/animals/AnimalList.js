@@ -7,9 +7,11 @@ import AnimalOwnerRepository from "../../repositories/AnimalOwnerRepository"
 import useModal from "../../hooks/ui/useModal"
 import useSimpleAuth from "../../hooks/ui/useSimpleAuth"
 import OwnerRepository from "../../repositories/OwnerRepository"
+import TreatmentRepository from "../../repositories/TreatmentRepository"
 
 import "./AnimalList.css"
 import "./cursor.css"
+import { AnimalTreatmentDialog } from "./AnimalTreamentDialog"
 
 
 export const AnimalListComponent = (props) => {
@@ -20,20 +22,43 @@ export const AnimalListComponent = (props) => {
     const { getCurrentUser } = useSimpleAuth()
     const history = useHistory()
     let { toggleDialog, modalIsOpen } = useModal("#dialog--animal")
+    let treatmentDialogModal = useModal("#dialog--animal--treament")
+
+    const toggleTreatmentDialog = treatmentDialogModal.toggleDialog;
 
     const syncAnimals = () => {
-        AnimalRepository.getAll().then(data => petAnimals(data))
+        AnimalRepository.getAll().then(data => {
+            if (!getCurrentUser().employee) {
+                data = data.filter(animalObj => animalObj.animalOwners.find(animalOwner => animalOwner.userId === getCurrentUser().id))
+            }
+            petAnimals(data)
+        })
     }
 
     useEffect(() => {
-        OwnerRepository.getAllCustomers().then(updateOwners)
-        AnimalOwnerRepository.getAll().then(setAnimalOwners)
+        OwnerRepository.getAllCustomers().then(data => updateOwners(data))
+        AnimalOwnerRepository.getAll().then(data => setAnimalOwners(data))
         syncAnimals()
     }, [])
 
     const showTreatmentHistory = animal => {
         setCurrentAnimal(animal)
         toggleDialog()
+    }
+
+    const addTreatment = animal => {
+        setCurrentAnimal(animal)
+        toggleTreatmentDialog();
+    }
+
+    const addTreatmentToDb = (newTreatment, animal) => {
+        TreatmentRepository.addTreatment(newTreatment)
+            .then(() => {
+                syncAnimals();
+                setCurrentAnimal(animal)
+            });
+
+        toggleTreatmentDialog();
     }
 
     useEffect(() => {
@@ -47,11 +72,24 @@ export const AnimalListComponent = (props) => {
 
         return () => window.removeEventListener("keyup", handler)
     }, [toggleDialog, modalIsOpen])
+    
+    useEffect(() => {
+        const handler = e => {
+            if (e.keyCode === 27 && treatmentDialogModal.modalIsOpen) {
+                toggleTreatmentDialog()
+            }
+        }
+
+        window.addEventListener("keyup", handler)
+
+        return () => window.removeEventListener("keyup", handler)
+    }, [toggleTreatmentDialog, treatmentDialogModal.modalIsOpen])
 
 
     return (
         <>
-            <AnimalDialog toggleDialog={toggleDialog} animal={currentAnimal} />
+            <AnimalDialog toggleDialog={toggleDialog} animal={currentAnimal}/>
+            <AnimalTreatmentDialog toggleTreatmentDialog={toggleTreatmentDialog} animal={currentAnimal} addTreatmentToDb={addTreatmentToDb}/>
 
 
             {
@@ -76,6 +114,7 @@ export const AnimalListComponent = (props) => {
                             syncAnimals={syncAnimals}
                             setAnimalOwners={setAnimalOwners}
                             showTreatmentHistory={showTreatmentHistory}
+                            addTreatment={addTreatment}
                         />)
                 }
             </ul>

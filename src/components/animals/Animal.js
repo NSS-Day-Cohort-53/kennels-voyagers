@@ -8,11 +8,13 @@ import useResourceResolver from "../../hooks/resource/useResourceResolver";
 import "./AnimalCard.css"
 
 export const Animal = ({ animal, syncAnimals,
-    showTreatmentHistory, owners }) => {
+    showTreatmentHistory, owners, addTreatment }) => {
     const [detailsOpen, setDetailsOpen] = useState(false)
     const [isEmployee, setAuth] = useState(false)
     const [myOwners, setPeople] = useState([])
     const [allOwners, registerOwners] = useState([])
+    const [notYetOwners, updateNotYetOwners] = useState([])
+    const [selectedOwnerId, setSelectedOwnerId] = useState(0)
     const [classes, defineClasses] = useState("card animal")
     const { getCurrentUser } = useSimpleAuth()
     const history = useHistory()
@@ -52,6 +54,21 @@ export const Animal = ({ animal, syncAnimals,
         }
     }, [animalId])
 
+    useEffect(() => {
+        updateNotYetOwners(allOwners.filter(allOwner => !myOwners.find(myOwner => myOwner.userId === allOwner.id)));
+    }, [myOwners, myOwners])
+
+    const addOwner = (event) => {
+        if (selectedOwnerId > 0 ) {
+            AnimalOwnerRepository.assignOwner(currentAnimal.id,selectedOwnerId)
+                .then( () => {
+                    syncAnimals()
+                    getPeople()
+                })
+        }
+        setSelectedOwnerId(0);
+    }
+
     return (
         <>
             <li className={classes}>
@@ -84,7 +101,7 @@ export const Animal = ({ animal, syncAnimals,
                         <section>
                             <h6>Caretaker(s)</h6>
                             <span className="small">
-                            <p>{`${animal.animalCaretakers.map(users=>{
+                            <p>{`${animal?.animalCaretakers.map(users=>{
                                 return `${users.user.name}`
                             })}`}</p>
                             </span>
@@ -92,22 +109,28 @@ export const Animal = ({ animal, syncAnimals,
 
                             <h6>Owners</h6>
                             <span className="small">
-                                Owned by unknown
+                              Owned By {animal?.animalOwners.map(assignedOwner=> assignedOwner.user.name).join(", ")}
+                        
                             </span>
 
                             {
-                                myOwners.length < 2
-                                    ? <select defaultValue=""
-                                        name="owner"
-                                        className="form-control small"
-                                        onChange={() => {}} >
-                                        <option value="">
-                                            Select {myOwners.length === 1 ? "another" : "an"} owner
-                                        </option>
-                                        {
-                                            allOwners.map(o => <option key={o.id} value={o.id}>{o.name}</option>)
-                                        }
-                                    </select>
+                                isEmployee && myOwners.length <= 6
+                                    ? 
+                                    <>
+                                        <select defaultValue=""
+                                            name="owner"
+                                            className="form-control small"
+                                            onChange={(event) => {setSelectedOwnerId(parseInt(event.target.value))}} >
+                                            <option value="0">
+                                                Select {myOwners.length >= 1 ? "another" : "an"} owner
+                                            </option>
+                                            {
+                                                
+                                                notYetOwners.map(o => <option key={o.id} value={o.id}>{o.name}</option>)
+                                            }
+                                        </select>
+                                        <button className="btn btn-warning mt-3 form-control small" onClick={addOwner}>Add owner</button>
+                                    </>
                                     : null
                             }
 
@@ -134,14 +157,20 @@ export const Animal = ({ animal, syncAnimals,
 
                         {
                             isEmployee
-                                ? <button className="btn btn-warning mt-3 form-control small" onClick={() =>
+                                ?
+                            <>
+                                <button className="btn btn-warning mt-3 form-control small" onClick={() => addTreatment(currentAnimal)}>Add Treatment</button>
+                                 <button className="btn btn-warning mt-3 form-control small" onClick={() =>
                                     AnimalOwnerRepository
                                         .removeOwnersAndCaretakers(currentAnimal.id)
                                         .then(() => {AnimalRepository.delete(currentAnimal.id)}) // Remove animal
                                         .then(() => {AnimalRepository.getAll()}) // Get all animals
                                         .then(()=> {syncAnimals()})
-                                }>Discharge</button>
+                                    }>Discharge</button>
+                                    </>
                                 : ""
+                               
+                               
                         }
 
                     </details>
