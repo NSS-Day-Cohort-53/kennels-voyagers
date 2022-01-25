@@ -12,21 +12,19 @@ export default () => {
                 <React.Fragment>
                     <h2>Matching Animals</h2>
                     <section className="animals">
-                        <ul>
-                            {location.state.animals.map(animal => {
+                        {location.state.animals.map(animal => {
                             return (
-                                <li>
+                                <div className="searchResults">
                                     <Link className="card-link"
                                     to={{
                                         pathname: `/animals/${animal.id}`
                                     }}>
                                         {animal.name}
                                     </Link>
-                                </li>
+                                </div>
                             )
-                        
+                    
                         })}
-                        </ul>
                     </section>
                 </React.Fragment>
             )
@@ -39,21 +37,19 @@ export default () => {
                 <React.Fragment>
                     <h2>Matching Employees</h2>
                     <section className="employees">
-                        <ul>
-                            {location.state.employees.map(employee =>  {
-                                return (
-                                    <li>
-                                        <Link className="card-link"
-                                        to={{
-                                            pathname: `/employees/${employee.id}`
-                                        }}>
-                                            {employee.name}
-                                        </Link>
-                                    </li>
-                                )
-                            
-                            })}
-                        </ul>
+                        {location.state.employees.map(employee =>  {
+                            return (
+                                <div className="searchResults">
+                                    <Link className="card-link"
+                                    to={{
+                                        pathname: `/employees/${employee.id}`
+                                    }}>
+                                        {employee.name}
+                                    </Link>
+                                </div>
+                            )
+                        
+                        })}
                     </section>
                 </React.Fragment>
             )
@@ -66,21 +62,19 @@ export default () => {
                 <React.Fragment>
                     <h2>Matching Locations</h2>
                     <section className="locations">
-                        <ul>
-                            {location.state.locations.map(loc => {
-                                    return (
-                                        <li>
-                                            <Link className="card-link"
-                                            to={{
-                                                pathname: `/locations/${loc.id}`
-                                            }}>
-                                                {loc.name}
-                                            </Link>
-                                        </li>
-                                    )
-                                
-                                })}
-                        </ul>
+                        {location.state.locations.map(loc => {
+                            return (
+                                <div className="searchResults">
+                                    <Link className="card-link"
+                                    to={{
+                                        pathname: `/locations/${loc.id}`
+                                    }}>
+                                        {loc.name}
+                                    </Link>
+                                </div>
+                            )
+                            
+                        })}
                     </section>
                 </React.Fragment>
             )
