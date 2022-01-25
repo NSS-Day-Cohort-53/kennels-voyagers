@@ -13,6 +13,7 @@ export const Animal = ({ animal, syncAnimals,
     const [isEmployee, setAuth] = useState(false)
     const [myOwners, setPeople] = useState([])
     const [allOwners, registerOwners] = useState([])
+    const [selectedOwnerId, setSelectedOwnerId] = useState(0)
     const [classes, defineClasses] = useState("card animal")
     const { getCurrentUser } = useSimpleAuth()
     const history = useHistory()
@@ -51,6 +52,10 @@ export const Animal = ({ animal, syncAnimals,
                 })
         }
     }, [animalId])
+
+    const addOwner = () => {
+        
+    }
 
     return (
         <>
@@ -97,18 +102,22 @@ export const Animal = ({ animal, syncAnimals,
                             </span>
 
                             {
-                                myOwners.length < 2
-                                    ? <select defaultValue=""
-                                        name="owner"
-                                        className="form-control small"
-                                        onChange={() => {}} >
-                                        <option value="">
-                                            Select {myOwners.length === 1 ? "another" : "an"} owner
-                                        </option>
-                                        {
-                                            allOwners.map(o => <option key={o.id} value={o.id}>{o.name}</option>)
-                                        }
-                                    </select>
+                                myOwners.length < 6
+                                    ? 
+                                    <>
+                                        <select defaultValue=""
+                                            name="owner"
+                                            className="form-control small"
+                                            onChange={() => {}} >
+                                            <option value="">
+                                                Select {myOwners.length === 1 ? "another" : "an"} owner
+                                            </option>
+                                            {
+                                                allOwners.map(o => <option key={o.id} value={o.id}>{o.name}</option>)
+                                            }
+                                        </select>
+                                        <button className="btn btn-warning mt-3 form-control small" onClick={addOwner}>Add owner</button>
+                                    </>
                                     : null
                             }
 
