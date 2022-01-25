@@ -56,13 +56,17 @@ export const Animal = ({ animal, syncAnimals,
 
     useEffect(() => {
         updateNotYetOwners(allOwners.filter(allOwner => !myOwners.find(myOwner => myOwner.userId === allOwner.id)));
-    }, [myOwners])
+    }, [myOwners, myOwners])
 
     const addOwner = (event) => {
         if (selectedOwnerId > 0 ) {
             AnimalOwnerRepository.assignOwner(currentAnimal.id,selectedOwnerId)
-                .then( () => syncAnimals())
+                .then( () => {
+                    syncAnimals()
+                    getPeople()
+                })
         }
+        setSelectedOwnerId(0);
     }
 
     return (
