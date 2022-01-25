@@ -13,6 +13,7 @@ export const Animal = ({ animal, syncAnimals,
     const [isEmployee, setAuth] = useState(false)
     const [myOwners, setPeople] = useState([])
     const [allOwners, registerOwners] = useState([])
+    const [notYetOwners, updateNotYetOwners] = useState([])
     const [selectedOwnerId, setSelectedOwnerId] = useState(0)
     const [classes, defineClasses] = useState("card animal")
     const { getCurrentUser } = useSimpleAuth()
@@ -52,6 +53,10 @@ export const Animal = ({ animal, syncAnimals,
                 })
         }
     }, [animalId])
+
+    useEffect(() => {
+        updateNotYetOwners(allOwners.filter(allOwner => !myOwners.find(myOwner => myOwner.userId === allOwner.id)));
+    }, [myOwners, allOwners])
 
     const addOwner = () => {
         
@@ -108,12 +113,13 @@ export const Animal = ({ animal, syncAnimals,
                                         <select defaultValue=""
                                             name="owner"
                                             className="form-control small"
-                                            onChange={() => {}} >
-                                            <option value="">
+                                            onChange={(event) => {setSelectedOwnerId(parseInt(event.target.value))}} >
+                                            <option value="0">
                                                 Select {myOwners.length === 1 ? "another" : "an"} owner
                                             </option>
                                             {
-                                                allOwners.map(o => <option key={o.id} value={o.id}>{o.name}</option>)
+                                                
+                                                notYetOwners.map(o => <option key={o.id} value={o.id}>{o.name}</option>)
                                             }
                                         </select>
                                         <button className="btn btn-warning mt-3 form-control small" onClick={addOwner}>Add owner</button>
