@@ -13,7 +13,7 @@ const useModal = (selector) => {
             document.querySelector(`${selector}`).setAttribute("open", true)
         }
     }
-
+    
     return { toggleDialog, modalIsOpen }
 }
 

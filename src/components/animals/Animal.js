@@ -8,7 +8,7 @@ import useResourceResolver from "../../hooks/resource/useResourceResolver";
 import "./AnimalCard.css"
 
 export const Animal = ({ animal, syncAnimals,
-    showTreatmentHistory, owners }) => {
+    showTreatmentHistory, owners, addTreatment }) => {
     const [detailsOpen, setDetailsOpen] = useState(false)
     const [isEmployee, setAuth] = useState(false)
     const [myOwners, setPeople] = useState([])
@@ -84,7 +84,7 @@ export const Animal = ({ animal, syncAnimals,
                         <section>
                             <h6>Caretaker(s)</h6>
                             <span className="small">
-                            <p>{`${animal.animalCaretakers.map(users=>{
+                            <p>{`${animal?.animalCaretakers.map(users=>{
                                 return `${users.user.name}`
                             })}`}</p>
                             </span>
@@ -135,13 +135,18 @@ export const Animal = ({ animal, syncAnimals,
 
                         {
                             isEmployee
-                                ? <button className="btn btn-warning mt-3 form-control small" onClick={() =>
-                                    AnimalOwnerRepository
-                                        .removeOwnersAndCaretakers(currentAnimal.id)
-                                        .then(() => {}) // Remove animal
-                                        .then(() => {}) // Get all animals
-                                }>Discharge</button>
-                                : ""
+                                ? 
+                                <>
+                                    <button className="btn btn-warning mt-3 form-control small" onClick={() => addTreatment(currentAnimal)}>Add Treatment</button>
+                                    <button className="btn btn-warning mt-3 form-control small" onClick={() =>
+                                        AnimalOwnerRepository
+                                            .removeOwnersAndCaretakers(currentAnimal.id)
+                                            .then(() => {}) // Remove animal
+                                            .then(() => {}) // Get all animals
+                                    }>Discharge</button>
+                                </>
+                                    : ""
+                               
                         }
 
                     </details>
