@@ -20,7 +20,8 @@ export const AnimalTreatmentDialog = ({toggleTreatmentDialog, animal, addTreatme
                         required
                         autoFocus
                         className="form-control"
-                        placeholder="nail trimmed..."
+                        placeholder="nails trimmed..."
+                        value={description}
                     />
                 </div>
                 <button
@@ -38,6 +39,13 @@ export const AnimalTreatmentDialog = ({toggleTreatmentDialog, animal, addTreatme
                     addTreatmentToDb(newTreatment, animal)
 
                 }}>Add</button>
+                <button style={{
+                    position: "absolute",
+                    top: "1em",
+                    right: "2em"
+                    }}
+                id="closeBtn"
+                onClick={toggleTreatmentDialog}>close</button>
             </form>
             
         </dialog>
