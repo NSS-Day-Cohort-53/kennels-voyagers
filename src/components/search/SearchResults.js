@@ -14,14 +14,12 @@ export default () => {
                     <section className="animals">
                         {location.state.animals.map(animal => {
                             return (
-                                <div className="searchResults">
-                                    <Link className="card-link"
-                                    to={{
-                                        pathname: `/animals/${animal.id}`
-                                    }}>
-                                        {animal.name}
-                                    </Link>
-                                </div>
+                                <Link className="result"
+                                to={{
+                                    pathname: `/animals/${animal.id}`
+                                }}>
+                                    {animal.name}
+                                </Link>
                             )
                     
                         })}
@@ -39,14 +37,12 @@ export default () => {
                     <section className="employees">
                         {location.state.employees.map(employee =>  {
                             return (
-                                <div className="searchResults">
-                                    <Link className="card-link"
-                                    to={{
-                                        pathname: `/employees/${employee.id}`
-                                    }}>
-                                        {employee.name}
-                                    </Link>
-                                </div>
+                                <Link className="result"
+                                to={{
+                                    pathname: `/employees/${employee.id}`
+                                }}>
+                                    {employee.name}
+                                </Link>
                             )
                         
                         })}
@@ -64,14 +60,12 @@ export default () => {
                     <section className="locations">
                         {location.state.locations.map(loc => {
                             return (
-                                <div className="searchResults">
-                                    <Link className="card-link"
-                                    to={{
-                                        pathname: `/locations/${loc.id}`
-                                    }}>
-                                        {loc.name}
-                                    </Link>
-                                </div>
+                                <Link className="result"
+                                to={{
+                                    pathname: `/locations/${loc.id}`
+                                }}>
+                                    {loc.name}
+                                </Link>
                             )
                             
                         })}
