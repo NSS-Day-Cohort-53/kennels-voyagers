@@ -1,9 +1,11 @@
 import React from "react"
 import { Link, useLocation } from "react-router-dom";
+import useSimpleAuth from "../../hooks/ui/useSimpleAuth";
 import "./SearchResults.css"
 
 
 export default () => {
+    const { getCurrentUser } = useSimpleAuth()
     const location = useLocation()
 
     const displayAnimals = () => {
@@ -89,7 +91,7 @@ export default () => {
     return (
         <React.Fragment>
             <article className="searchResults">
-                {displayAnimals()}
+                {getCurrentUser().employee ? displayAnimals() : ""}
                 {displayEmployees()}
                 {displayLocations()}
             </article>
