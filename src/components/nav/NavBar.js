@@ -5,6 +5,8 @@ import useSimpleAuth from "../../hooks/ui/useSimpleAuth";
 import Settings from "../../repositories/Settings";
 import LocationRepository from "../../repositories/LocationRepository";
 import "bootstrap/dist/css/bootstrap.min.css"
+import $ from "jquery"
+import "bootstrap/dist/js/bootstrap.bundle"
 import "./NavBar.css"
 
 
