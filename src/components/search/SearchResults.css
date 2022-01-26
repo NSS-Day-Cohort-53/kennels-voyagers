@@ -1,3 +1,10 @@
 .searchResults {
     padding: 0 3em;
+    text-align: center;
+}
+
+.searchResult__list {
+    list-style-type: none;
+    padding-left: 0;
+    margin-left: 0;
 }
